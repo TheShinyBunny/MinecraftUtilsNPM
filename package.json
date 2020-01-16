@@ -1,0 +1,32 @@
+{
+  "name": "minecraft_utils",
+  "version": "1.0.0",
+  "description": "Minecraft utilities for npm",
+  "main": "./out/index.js",
+  "scripts": {
+    "prepublish": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "minecraft",
+    "client",
+    "launcher",
+    "server"
+  ],
+  "author": "TheShinyBunny",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shinyb123/MinecraftUtilsNPM.git"
+  },
+  "devDependencies": {
+    "@types/node": "^13.1.7",
+    "@types/node-fetch": "^2.5.4",
+    "@types/properties-reader": "0.0.1",
+    "typescript": "^3.7.5"
+  },
+  "dependencies": {
+    "properties": "^1.2.1",
+    "properties-reader": "^0.3.1"
+  }
+}
