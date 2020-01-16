@@ -26,7 +26,6 @@
     "typescript": "^3.7.5"
   },
   "dependencies": {
-    "properties": "^1.2.1",
     "properties-reader": "^0.3.1"
   }
 }
