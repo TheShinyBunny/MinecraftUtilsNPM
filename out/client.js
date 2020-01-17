@@ -30,9 +30,9 @@ function launchClient(options) {
         else {
             version = yield versions_1.getLatestRelease();
         }
-        let path = "./" + ((options && options.dir) || "") + version.id + ".jar";
-        if (options && options.dir && !fs.existsSync('./' + options.dir)) {
-            fs.mkdirSync('./' + options.dir, { recursive: true });
+        let path = ((options && options.dir) || "./") + version.id + ".jar";
+        if (options && options.dir && !fs.existsSync(options.dir)) {
+            fs.mkdirSync(options.dir, { recursive: true });
         }
         if (!fs.existsSync(path)) {
             yield _1.downloadUrl(version.downloads.client.url, path);
@@ -64,7 +64,7 @@ function launchClient(options) {
             cmd += " -width " + options.windowSize.width + " -height " + options.windowSize.height;
         }
         console.log(cmd);
-        let process = child_process_1.exec(cmd, { cwd: './' + ((options && options.dir) || "") }, (err, stdout, stderr) => {
+        let process = child_process_1.exec(cmd, { cwd: ((options && options.dir) || "./") }, (err, stdout, stderr) => {
             if (err) {
                 console.log(err);
             }

@@ -28,10 +28,10 @@ const events_1 = require("events");
 function launchServer(options) {
     return __awaiter(this, void 0, void 0, function* () {
         let jarName = ((options && options.jarName) || "server") + ".jar";
-        let dir = './' + ((options && options.dir) || "");
+        let dir = ((options && options.dir) || "./");
         let jar = dir + jarName;
         if (options && options.dir && !fs.existsSync(dir)) {
-            fs.mkdirSync(dir);
+            fs.mkdirSync(dir, { recursive: true });
         }
         let version;
         if (options && options.version) {
