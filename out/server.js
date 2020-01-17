@@ -25,6 +25,11 @@ const _1 = require(".");
 const child_process_1 = require("child_process");
 const properties_reader_1 = __importDefault(require("properties-reader"));
 const events_1 = require("events");
+/**
+ * Creates and launches a new Minecraft server.
+ * @param options Settings for the server
+ * @returns A promise resolved to an instance of the server, used to listen to events.
+ */
 function launchServer(options) {
     return __awaiter(this, void 0, void 0, function* () {
         let jarName = ((options && options.jarName) || "server") + ".jar";
@@ -85,6 +90,15 @@ class MinecraftServer extends events_1.EventEmitter {
         this.process.on("close", () => {
             this.emit("stop");
         });
+    }
+    /**
+     * Sends a minecraft command to the server's console.
+     * @param cmd The command to be executed
+     */
+    sendCommand(cmd) {
+        if (this.process.stdin) {
+            this.process.stdin.write(cmd + "\r\n");
+        }
     }
 }
 exports.MinecraftServer = MinecraftServer;

@@ -21,6 +21,11 @@ const events_1 = require("events");
 const fs = __importStar(require("fs"));
 const child_process_1 = require("child_process");
 const _1 = require(".");
+/**
+ * Launches a new Minecraft client.
+ * @param options Settings for the client
+ * @returns A promise that resolves to an instance of the client, used for listening to events.
+ */
 function launchClient(options) {
     return __awaiter(this, void 0, void 0, function* () {
         let version;
@@ -47,8 +52,8 @@ function launchClient(options) {
             }
         }
         cmd += "\" net.minecraft.client.main.Main \
-    -version " + version.id + " \
-    -accessToken dummy \
+    --version " + version.id + " \
+    --accessToken dummy \
     --assetsDir %APPDATA%/.minecraft/assets \
     --assetIndex 1.15";
         if (options && options.server) {
@@ -61,7 +66,10 @@ function launchClient(options) {
             cmd += " -server " + host + " -port " + port;
         }
         if (options && options.windowSize) {
-            cmd += " -width " + options.windowSize.width + " -height " + options.windowSize.height;
+            cmd += " --width " + options.windowSize.width + " --height " + options.windowSize.height;
+        }
+        if (options && options.jvmArgs) {
+            cmd += " " + options.jvmArgs;
         }
         console.log(cmd);
         let process = child_process_1.exec(cmd, { cwd: ((options && options.dir) || "./") }, (err, stdout, stderr) => {
