@@ -5,6 +5,7 @@ import { downloadUrl } from ".";
 import { exec, execSync, ChildProcess } from "child_process";
 import properties from "properties-reader";
 import { EventEmitter } from "events";
+import path from 'path';
 
 /**
  * Creates and launches a new Minecraft server.
@@ -14,7 +15,7 @@ import { EventEmitter } from "events";
 export async function launchServer(options?: ServerOptions): Promise<MinecraftServer> {
     let jarName = ((options && options.jarName) || "server") + ".jar";
     let dir = ((options && options.dir) || "./");
-    let jar = dir + jarName;
+    let jar = path.resolve(dir,jarName);
     if (options && options.dir && !fs.existsSync(dir)) {
         fs.mkdirSync(dir, {recursive: true});
     }
@@ -27,25 +28,27 @@ export async function launchServer(options?: ServerOptions): Promise<MinecraftSe
     if (!fs.existsSync(jar)) {
         await downloadUrl(version.downloads.server.url,jar);
     }
-    if (!fs.existsSync(dir + 'eula.txt')) {
+    let eulaPath = path.resolve(dir,'eula.txt');
+    if (!fs.existsSync(eulaPath)) {
         execSync('java -jar ' + jarName,{cwd: dir});
-        if (fs.existsSync(dir + 'eula.txt')) {
-            let eulaProps = properties(dir + 'eula.txt');
+        if (fs.existsSync(eulaPath)) {
+            let eulaProps = properties(eulaPath);
             if (eulaProps.get("eula") !== "true") {
                 eulaProps.set("eula","true");
-                eulaProps.save(dir + 'eula.txt');
+                eulaProps.save(eulaPath);
             }
         } else {
             console.log("eula not created yet!");
         }
     }
+    let propsPath = path.resolve(dir,'server.properties');
     if (options && options.properties) {
-        if (fs.existsSync(dir + 'server.properties')) {
-            let props = properties(dir + 'server.properties');
+        if (fs.existsSync(propsPath)) {
+            let props = properties(propsPath);
             for (let k in options.properties) {
                 props.set(k,options.properties[k]);
             }
-            props.save(dir + 'server.properties');
+            props.save(propsPath);
         }
     }
     let process = exec('java -jar ' + jarName,{cwd: dir});
@@ -93,7 +96,6 @@ export class MinecraftServer extends EventEmitter {
         if (this.process.stdin) {
             this.process.stdin.write(cmd + "\r\n");
         }
-        
     }
 
 }

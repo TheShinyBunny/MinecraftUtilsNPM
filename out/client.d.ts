@@ -6,8 +6,8 @@ import { ChildProcess } from "child_process";
  * @param options Settings for the client
  * @returns A promise that resolves to an instance of the client, used for listening to events.
  */
-export declare function launchClient(options?: ClientOptions): Promise<RunningClient>;
-export declare interface RunningClient {
+export declare function launchClient(options?: ClientOptions): Promise<MinecraftClient>;
+export declare interface MinecraftClient {
     on(event: string, listener: Function): this;
     /**
      * An event called when the client window closes.

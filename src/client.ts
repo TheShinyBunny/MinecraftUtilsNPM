@@ -3,27 +3,28 @@ import { EventEmitter } from 'events';
 import * as fs from "fs";
 import { ChildProcess, exec } from "child_process";
 import { downloadUrl } from ".";
+import path from 'path';
 
 /**
  * Launches a new Minecraft client.
  * @param options Settings for the client
  * @returns A promise that resolves to an instance of the client, used for listening to events.
  */
-export async function launchClient(options?: ClientOptions): Promise<RunningClient> {
+export async function launchClient(options?: ClientOptions): Promise<MinecraftClient> {
     let version: Version;
     if (options && options.version) {
         version = await getVersion(options.version);
     } else {
         version = await getLatestRelease();
     }
-    let path = ((options && options.dir) || "./") + version.id + ".jar";
+    let jarPath = path.resolve(((options && options.dir) || "./"),version.id + ".jar");
     if (options && options.dir && !fs.existsSync(options.dir)) {
         fs.mkdirSync(options.dir,{recursive: true});
     }
-    if (!fs.existsSync(path)) {
-        await downloadUrl(version.downloads.client.url,path);
+    if (!fs.existsSync(jarPath)) {
+        await downloadUrl(version.downloads.client.url,jarPath);
     }
-    let cmd = "java -cp \"" + version.id + ".jar";
+    let cmd = "java -cp \"" + jarPath;
     for (let lib of version.libraries) {
         cmd += ";";
         cmd += "%APPDATA%/.minecraft/libraries/" + lib.downloads.artifact.path;
@@ -53,7 +54,6 @@ export async function launchClient(options?: ClientOptions): Promise<RunningClie
     if (options && options.jvmArgs) {
         cmd += " " + options.jvmArgs;
     }
-    console.log(cmd);
     let process = exec(cmd, {cwd: ((options && options.dir) || "./")},(err,stdout,stderr)=>{
         if (err) {
             console.log(err);
@@ -72,7 +72,7 @@ export async function launchClient(options?: ClientOptions): Promise<RunningClie
     return new MinecraftClient(process);
 }
 
-export declare interface RunningClient {
+export declare interface MinecraftClient {
     on(event: string, listener: Function): this;
     /**
      * An event called when the client window closes.

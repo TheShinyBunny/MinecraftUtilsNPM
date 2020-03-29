@@ -15,7 +15,7 @@ To launch a minecraft client, use the `launchClient` function.
 ```ts
 
 // typescript
-import { launchClient } from 'minecraft_utils';
+import { launchClient, MinecraftClient } from 'minecraft_utils';
 
 async function launch() {
     let client: MinecraftClient = await launchClient({dir: './client/', version: '1.15'});
@@ -69,10 +69,10 @@ async function launch() {
 These are the optional settings you can pass to the `launchServer` function in the `options` parameter:
 
 * `dir`: A path to the directory to save the world, logs, datapacks, etc.
-* `version`: The version ID to create the server for. Can be any valid version ID, for example: '1.15', '1.14.4', '19w45a'...
+* `version`: The version ID to create the server for. Can be any valid version ID, for example: '1.15', '1.14.4', '19w45a'... By default, uses the latest release.
 * `outputCallback(msg)`: A callback for any output from the server stdout.
 * `jarName`: The name to use for the server.jar file (without the .jar extension).
-* `properties`: A key-value object containing custom properties to change in the server.properties file.
+* `properties`: A JSON object containing custom properties to change in the server.properties file.
 
 ### Server Events
 
