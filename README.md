@@ -57,7 +57,7 @@ client.on("close",()=>{
 To launch a Minecraft server, use the `launchServer` function:
 
 ```ts
-import { launchClient } from 'minecraft_utils';
+import { launchServer, MinecraftServer } from 'minecraft_utils';
 
 async function launch() {
     let server: MinecraftServer = await launchServer({dir: './server/'});
